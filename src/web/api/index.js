@@ -468,6 +468,88 @@ mdi.delete = (id) => new Promise((resolve, reject) => {
         });
 });
 
+
+//
+// Tools
+//
+const tools = {};
+
+tools.fetch = (options) => new Promise((resolve, reject) => {
+    authrequest
+        .get('/api/tools')
+        .query(options)
+        .end((err, res) => {
+            if (err) {
+                reject(res);
+            } else {
+                resolve(res);
+            }
+        });
+});
+
+tools.create = (options) => new Promise((resolve, reject) => {
+    authrequest
+        .post('/api/tools')
+        .send(options)
+        .end((err, res) => {
+            if (err) {
+                reject(res);
+            } else {
+                resolve(res);
+            }
+        });
+});
+
+tools.read = (id) => new Promise((resolve, reject) => {
+    authrequest
+        .get('/api/tools/' + id)
+        .end((err, res) => {
+            if (err) {
+                reject(res);
+            } else {
+                resolve(res);
+            }
+        });
+});
+
+tools.update = (id, options) => new Promise((resolve, reject) => {
+    authrequest
+        .put('/api/tools/' + id)
+        .send(options)
+        .end((err, res) => {
+            if (err) {
+                reject(res);
+            } else {
+                resolve(res);
+            }
+        });
+});
+
+tools.bulkUpdate = (options) => new Promise((resolve, reject) => {
+    authrequest
+        .put('/api/tools/')
+        .send(options)
+        .end((err, res) => {
+            if (err) {
+                reject(res);
+            } else {
+                resolve(res);
+            }
+        });
+});
+
+tools.delete = (id) => new Promise((resolve, reject) => {
+    authrequest
+        .delete('/api/tools/' + id)
+        .end((err, res) => {
+            if (err) {
+                reject(res);
+            } else {
+                resolve(res);
+            }
+        });
+});
+
 //
 // Commands
 //
@@ -600,6 +682,7 @@ export default {
     events, // Events
     macros, // Macros
     mdi, // MDI
+    tools, // Tools
     commands, // Commands
     watch // Watch Directory
 };

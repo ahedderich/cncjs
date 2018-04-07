@@ -11,6 +11,7 @@ import {
     NOTIFICATION_M2_PROGRAM_END,
     NOTIFICATION_M30_PROGRAM_END,
     NOTIFICATION_M6_TOOL_CHANGE,
+    NOTIFICATION_M6_AUTO_TOOL_CHANGE,
     NOTIFICATION_M109_SET_EXTRUDER_TEMPERATURE,
     NOTIFICATION_M190_SET_HEATED_BED_TEMPERATURE
 } from './constants';
@@ -36,6 +37,7 @@ const Notifications = ({ show, type, data, onDismiss, style, ...props }) => (
                 [NOTIFICATION_M2_PROGRAM_END]: 'success',
                 [NOTIFICATION_M30_PROGRAM_END]: 'success',
                 [NOTIFICATION_M6_TOOL_CHANGE]: 'info',
+                [NOTIFICATION_M6_AUTO_TOOL_CHANGE]: 'info',
                 [NOTIFICATION_M109_SET_EXTRUDER_TEMPERATURE]: 'warning',
                 [NOTIFICATION_M190_SET_HEATED_BED_TEMPERATURE]: 'warning'
             }[type]}
@@ -74,6 +76,21 @@ const Notifications = ({ show, type, data, onDismiss, style, ...props }) => (
             {type === NOTIFICATION_M6_TOOL_CHANGE &&
             <div>
                 <div><strong>{i18n._('M6 Tool Change')}</strong></div>
+                <div>
+                    {i18n._('Run a tool change macro to change the tool and adjust the Z-axis offset. Afterwards, click the Resume button to resume program execution.')}
+                    <Space width="4" />
+                    <Anchor
+                        target="_blank"
+                        href="https://github.com/cncjs/cncjs/wiki/Tool-Change"
+                    >
+                        {i18n._('Learn more')}
+                    </Anchor>
+                </div>
+            </div>
+            }
+            {type === NOTIFICATION_M6_AUTO_TOOL_CHANGE &&
+            <div>
+                <div><strong>{i18n._('M6 Auto Tool Change')}</strong></div>
                 <div>
                     {i18n._('Run a tool change macro to change the tool and adjust the Z-axis offset. Afterwards, click the Resume button to resume program execution.')}
                     <Space width="4" />

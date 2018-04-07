@@ -12,6 +12,7 @@ import ProbeWidget from '../../widgets/Probe';
 import SmoothieWidget from '../../widgets/Smoothie';
 import SpindleWidget from '../../widgets/Spindle';
 import CustomWidget from '../../widgets/Custom';
+import ToolChangerWidget from '../../widgets/ToolChanger';
 import TinyGWidget from '../../widgets/TinyG';
 import VisualizerWidget from '../../widgets/Visualizer';
 import WebcamWidget from '../../widgets/Webcam';
@@ -30,6 +31,7 @@ const getWidgetByName = (name) => {
         'smoothie': SmoothieWidget,
         'spindle': SpindleWidget,
         'custom': CustomWidget,
+        'toolchanger': ToolChangerWidget,
         'tinyg': TinyGWidget,
         'visualizer': VisualizerWidget,
         'webcam': WebcamWidget

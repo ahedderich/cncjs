@@ -6,5 +6,6 @@ export * as commands from './api.commands';
 export * as events from './api.events';
 export * as macros from './api.macros';
 export * as mdi from './api.mdi';
+export * as tools from './api.tools';
 export * as users from './api.users';
 export * as watch from './api.watch';

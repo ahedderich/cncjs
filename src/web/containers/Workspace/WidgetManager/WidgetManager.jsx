@@ -119,7 +119,14 @@ class WidgetManager extends PureComponent {
             disabled: false
         },
         {
-            id: 'webcam',
+            id: 'toolchanger',
+            caption: i18n._('Tool Changer Widget'),
+            details: i18n._('This widget allows you to add addtional operations to for M6 requests.'),
+            visible: true,
+            disabled: false
+        },
+        {
+            id: 'c',
             caption: i18n._('Webcam Widget'),
             details: i18n._('This widget lets you monitor a webcam.'),
             visible: true,

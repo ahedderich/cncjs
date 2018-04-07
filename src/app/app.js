@@ -292,6 +292,14 @@ const appMain = () => {
         app.put(urljoin(settings.route, 'api/mdi/:id'), api.mdi.update);
         app.delete(urljoin(settings.route, 'api/mdi/:id'), api.mdi.__delete);
 
+        // Tools
+        app.get(urljoin(settings.route, 'api/tools'), api.tools.fetch);
+        app.post(urljoin(settings.route, 'api/tools'), api.tools.create);
+        app.put(urljoin(settings.route, 'api/tools'), api.tools.bulkUpdate);
+        app.get(urljoin(settings.route, 'api/tools/:id'), api.tools.read);
+        app.put(urljoin(settings.route, 'api/tools/:id'), api.tools.update);
+        app.delete(urljoin(settings.route, 'api/tools/:id'), api.tools.__delete);
+
         // Users
         app.get(urljoin(settings.route, 'api/users'), api.users.fetch);
         app.post(urljoin(settings.route, 'api/users/'), api.users.create);

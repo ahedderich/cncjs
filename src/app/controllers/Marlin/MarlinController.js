@@ -385,7 +385,7 @@ class MarlinController {
                 // M6 Tool Change
                 if (_.includes(words, 'M6')) {
                     log.debug('M6 Tool Change');
-                    this.feeder.hold({ data: 'M6' }); // Hold reason
+                    this.feeder.hold({ data: 'M6', line: line }); // Hold reason
                 }
 
                 return line;
@@ -481,7 +481,7 @@ class MarlinController {
                 // M6 Tool Change
                 if (_.includes(words, 'M6')) {
                     log.debug(`M6 Tool Change: line=${sent + 1}, sent=${sent}, received=${received}`);
-                    this.workflow.pause({ data: 'M6' });
+                    this.workflow.pause({ data: 'M6', line: line });
                 }
 
                 return line;

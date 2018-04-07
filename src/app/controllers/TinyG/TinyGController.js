@@ -297,7 +297,7 @@ class TinyGController {
                 // M6 Tool Change
                 if (_.includes(words, 'M6')) {
                     log.debug(`M6 Tool Change: line=${sent + 1}, sent=${sent}, received=${received}`);
-                    this.workflow.pause({ data: 'M6' });
+                    this.workflow.pause({ data: 'M6', line: line });
                 }
 
                 return line;

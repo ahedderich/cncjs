@@ -58,6 +58,7 @@ import {
     NOTIFICATION_M2_PROGRAM_END,
     NOTIFICATION_M30_PROGRAM_END,
     NOTIFICATION_M6_TOOL_CHANGE,
+    NOTIFICATION_M6_AUTO_TOOL_CHANGE,
     NOTIFICATION_M109_SET_EXTRUDER_TEMPERATURE,
     NOTIFICATION_M190_SET_HEATED_BED_TEMPERATURE
 } from './constants';
@@ -609,7 +610,12 @@ class VisualizerWidget extends PureComponent {
                     notification.type = NOTIFICATION_M30_PROGRAM_END;
                 } else if (data === 'M6') {
                     // M6 Tool Change
-                    notification.type = NOTIFICATION_M6_TOOL_CHANGE;
+                    const ToolChangerConfig = new WidgetConfig('toolchanger');
+                    if (!ToolChangerConfig.get('disabled')) {
+                        notification.type = NOTIFICATION_M6_AUTO_TOOL_CHANGE;
+                    } else {
+                        notification.type = NOTIFICATION_M6_TOOL_CHANGE;
+                    }
                 } else if (data === 'M109') {
                     // M109 Set Extruder Temperature
                     notification.type = NOTIFICATION_M109_SET_EXTRUDER_TEMPERATURE;

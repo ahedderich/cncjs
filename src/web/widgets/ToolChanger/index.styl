@@ -1,0 +1,43 @@
+.widget-content {
+    position: relative;
+
+    &.hidden {
+        display: none;
+    }
+    &.fullscreen {
+    }
+
+    .inactive-content {
+        padding: 10px;
+        color: #333;
+        opacity: .65;
+    }
+    .active-content {
+        padding: 10px;
+        color: #333;
+    }
+}
+
+.panel {
+    margin-bottom: 10px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    :global {
+        .row {
+            margin-bottom: 5px;
+        }
+        .row:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
