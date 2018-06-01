@@ -195,6 +195,10 @@ const defaultState = {
                 }
             }
         },
+        toolchanger: {
+            disabled: true,
+            minimized: false
+        },
         webcam: {
             disabled: true,
             minimized: false,

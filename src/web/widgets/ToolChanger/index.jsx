@@ -96,8 +96,6 @@ class ToolChangerWidget extends PureComponent {
                     const words = ensureArray(data.words);
                     const toolNumber = _.fromPairs(words).T;
                     if (toolNumber > 0) {
-                        console.log(this.config);
-                        console.log(toolNumber);
                         this.setState({ changeToolNumber: toolNumber });
                     }
                 }

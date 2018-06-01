@@ -35,9 +35,6 @@ class ToolPanel extends PureComponent {
                                 width: '100%',
                                 textAlign: 'left'
                             }}
-                            onClick={() => {
-                                console.log('run');
-                            }}
                         >
                             {c.number}:
                             <Space width="8" />

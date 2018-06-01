@@ -29,7 +29,7 @@ class ToolPanel extends PureComponent {
                         </div>
                         <div className="col col-xs-8">
                             <div className={styles.well}>
-                                {i18n._('Connected')}
+                                {i18n._('Changing Tool')}
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@ class ToolPanel extends PureComponent {
                         </div>
                         <div className="col col-xs-8">
                             <div className={styles.well}>
-                                {state.currentToolNumber}
+                                {state.currentToolNumber} -&gt; 2
                             </div>
                         </div>
                     </div>

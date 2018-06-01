@@ -24,7 +24,6 @@ class ToolChanger extends PureComponent {
             );
         }
 
-        console.log(state.tools);
         return (
             <div className={styles.activeContent}>
                 <ToolChangerState config={config} state={state} actions={actions} />
