@@ -308,7 +308,7 @@ class Settings extends PureComponent {
                                     </div>
 
                                     <div className={styles.formGroup}>
-                                        <label>{i18n._('Unload Tool Macro')}</label>
+                                        <label>{i18n._('Suffix Macro')}</label>
                                         <Dropdown
                                             id="add-macro-dropdown"
                                             className="pull-right"
