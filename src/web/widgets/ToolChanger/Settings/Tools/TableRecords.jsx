@@ -121,21 +121,10 @@ class TableRecords extends PureComponent {
                         dataKey: 'number'
                     },
                     {
-                        title: i18n._('Use Z Offset'),
+                        title: i18n._('Z Offset'),
                         className: 'text-nowrap',
-                        key: 'useZOffset',
-                        dataKey: 'useZOffset',
-                        render: (value, row, rowIndex) => {
-                            if (value) {
-                                return (
-                                    <div>{row.zOffset}</div>
-                                );
-                            } else {
-                                return (
-                                    <div>-</div>
-                                );
-                            }
-                        }
+                        key: 'zOffset',
+                        dataKey: 'zOffset'
                     },
                     {
                         title: i18n._('Action'),

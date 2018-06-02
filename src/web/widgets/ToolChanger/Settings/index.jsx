@@ -40,8 +40,10 @@ class Settings extends PureComponent {
 
     config = this.props.config;
     fields = {
+        headMacro: null,
         loadToolMacro: null,
-        unloadToolMacro: null
+        unloadToolMacro: null,
+        footMacro: null
     };
     tools = null;
     state = {
@@ -50,8 +52,10 @@ class Settings extends PureComponent {
 
     load = () => {
         return {
+            headMacro: this.config.get('headMacro'),
             loadToolMacro: this.config.get('loadToolMacro'),
-            unloadToolMacro: this.config.get('unloadToolMacro')
+            unloadToolMacro: this.config.get('unloadToolMacro'),
+            footMacro: this.config.get('footMacro')
         };
     };
     save = () => {
@@ -63,17 +67,23 @@ class Settings extends PureComponent {
             .catch(() => {
                 // TODO
             });
+        const headMacro = this.fields.headMacro.value;
         const loadToolMacro = this.fields.loadToolMacro.value;
         const unloadToolMacro = this.fields.unloadToolMacro.value;
+        const footMacro = this.fields.footMacro.value;
+        this.config.set('headMacro', headMacro);
         this.config.set('loadToolMacro', loadToolMacro);
         this.config.set('unloadToolMacro', unloadToolMacro);
+        this.config.set('footMacro', footMacro);
     };
 
 
     render() {
         const {
+            headMacro,
             loadToolMacro,
-            unloadToolMacro
+            unloadToolMacro,
+            footMacro
         } = this.load();
 
         return (
@@ -106,7 +116,70 @@ class Settings extends PureComponent {
                                     event.preventDefault();
                                 }}
                             >
-                                <div className={styles.formFields}>
+                                <div className={styles.formFields} style={{ overflowY: 'auto', maxHeight: '500px' }}>
+                                    <div className={styles.formGroup}>
+                                        <label>{i18n._('Prefix Macro')}</label>
+                                        <Dropdown
+                                            id="add-macro-dropdown"
+                                            className="pull-right"
+                                            onSelect={(eventKey) => {
+                                                const textarea = ReactDOM.findDOMNode(this.fields.headMacro).querySelector('textarea');
+                                                if (textarea) {
+                                                    insertAtCaret(textarea, eventKey);
+                                                }
+                                            }}
+                                            pullRight
+                                        >
+                                            <Dropdown.Toggle
+                                                className={styles.btnLink}
+                                                style={{ boxShadow: 'none' }}
+                                                useAnchor
+                                                noCaret
+                                            >
+                                                <i className="fa fa-plus" />
+                                                <Space width="8" />
+                                                {i18n._('Macro Variables')}
+                                                <Space width="4" />
+                                                <i className="fa fa-caret-down" />
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu className={styles.macroVariablesDropdown}>
+                                                {variables.map(v => {
+                                                    if (typeof v === 'object') {
+                                                        return (
+                                                            <MenuItem
+                                                                header={v.type === 'header'}
+                                                                key={uniqueId()}
+                                                            >
+                                                                {v.text}
+                                                            </MenuItem>
+                                                        );
+                                                    }
+
+                                                    return (
+                                                        <MenuItem
+                                                            eventKey={v}
+                                                            key={uniqueId()}
+                                                        >
+                                                            {v}
+                                                        </MenuItem>
+                                                    );
+                                                })}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Textarea
+                                            ref={node => {
+                                                this.fields.headMacro = node;
+                                            }}
+                                            rows="5"
+                                            name="headMacro"
+                                            value={headMacro}
+                                            className={cx(
+                                                'form-control',
+                                                styles.formControl,
+                                                styles.long
+                                            )}
+                                        />
+                                    </div>
                                     <div className={styles.formGroup}>
                                         <label>{i18n._('Load Tool Macro')}</label>
                                         <Dropdown
@@ -226,6 +299,70 @@ class Settings extends PureComponent {
                                             rows="10"
                                             name="unloadToolMacro"
                                             value={unloadToolMacro}
+                                            className={cx(
+                                                'form-control',
+                                                styles.formControl,
+                                                styles.long
+                                            )}
+                                        />
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label>{i18n._('Unload Tool Macro')}</label>
+                                        <Dropdown
+                                            id="add-macro-dropdown"
+                                            className="pull-right"
+                                            onSelect={(eventKey) => {
+                                                const textarea = ReactDOM.findDOMNode(this.fields.footMacro).querySelector('textarea');
+                                                if (textarea) {
+                                                    insertAtCaret(textarea, eventKey);
+                                                }
+                                            }}
+                                            pullRight
+                                        >
+                                            <Dropdown.Toggle
+                                                className={styles.btnLink}
+                                                style={{ boxShadow: 'none' }}
+                                                useAnchor
+                                                noCaret
+                                            >
+                                                <i className="fa fa-plus" />
+                                                <Space width="8" />
+                                                {i18n._('Macro Variables')}
+                                                <Space width="4" />
+                                                <i className="fa fa-caret-down" />
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu className={styles.macroVariablesDropdown}>
+                                                {variables.map(v => {
+                                                    if (typeof v === 'object') {
+                                                        return (
+                                                            <MenuItem
+                                                                header={v.type === 'header'}
+                                                                key={uniqueId()}
+                                                            >
+                                                                {v.text}
+                                                            </MenuItem>
+                                                        );
+                                                    }
+
+                                                    return (
+                                                        <MenuItem
+                                                            eventKey={v}
+                                                            key={uniqueId()}
+                                                        >
+                                                            {v}
+                                                        </MenuItem>
+                                                    );
+                                                })}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Textarea
+                                            ref={node => {
+                                                this.fields.footMacro = node;
+                                            }}
+                                            rows="5"
+                                            name="footMacro"
+                                            value={footMacro}
                                             className={cx(
                                                 'form-control',
                                                 styles.formControl,

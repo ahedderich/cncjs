@@ -16,8 +16,6 @@ class CreateRecord extends PureComponent {
         action: PropTypes.object
     };
 
-    useZOffset = null;
-
     get value() {
         const {
             name,
@@ -32,9 +30,9 @@ class CreateRecord extends PureComponent {
             name: name,
             number: number,
             zOffset: zOffset,
-            pickupX,
-            pickupY,
-            pickupZ
+            pickupX: pickupX,
+            pickupY: pickupY,
+            pickupZ: pickupZ
         };
     }
     render() {

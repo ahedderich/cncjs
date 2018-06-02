@@ -83,7 +83,6 @@ class Tools extends PureComponent {
         updateRecord: (id, options) => {
             const records = [...this.state.records];
             const index = findIndex(records, { id: id });
-
             if (index < 0) {
                 return;
             }

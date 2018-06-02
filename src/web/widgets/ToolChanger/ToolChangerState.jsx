@@ -24,12 +24,38 @@ class ToolPanel extends PureComponent {
                     <div className="row no-gutters">
                         <div className="col col-xs-4">
                             <div className={styles.textEllipsis} title={i18n._('State')}>
+                                {i18n._('Workflow State')}
+                            </div>
+                        </div>
+                        <div className="col col-xs-8">
+                            <div className={styles.well}>
+                                {state.workflow.state}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row no-gutters">
+                        <div className="col col-xs-4">
+                            <div className={styles.textEllipsis} title={i18n._('State')}>
                                 {i18n._('State')}
                             </div>
                         </div>
                         <div className="col col-xs-8">
                             <div className={styles.well}>
-                                {i18n._('Changing Tool')}
+                                {state.currentState === 0 &&
+                                <div>
+                                    {i18n._('Idle')}
+                                </div>
+                                }
+                                {state.currentState === 1 &&
+                                <div>
+                                    {i18n._('Unloading')}: {state.currentToolNumber}
+                                </div>
+                                }
+                                {state.currentState === 2 &&
+                                <div>
+                                    {i18n._('Loading')}: {state.nextToolNumber}
+                                </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -41,7 +67,12 @@ class ToolPanel extends PureComponent {
                         </div>
                         <div className="col col-xs-8">
                             <div className={styles.well}>
-                                {state.currentToolNumber} <i className="fa fa-fw fa-arrow-right" /> 2
+                                {state.currentToolNumber === -1 &&
+                                    <span>{i18n._('None')}</span>
+                                }
+                                {state.currentToolNumber >= 0 &&
+                                    <span>{state.currentToolNumber}</span>
+                                }
                             </div>
                         </div>
                     </div>

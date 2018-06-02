@@ -59,22 +59,22 @@ export const fetch = (req, res) => {
                 totalRecords: Number(totalRecords)
             },
             records: pagedRecords.map(record => {
-                const { id, name, number, zOffset, useZOffset = {} } = { ...record };
-                return { id, name, number, zOffset, useZOffset };
+                const { id, name, number, zOffset, pickupX, pickupY, pickupZ = {} } = { ...record };
+                return { id, name, number, zOffset, pickupX, pickupY, pickupZ };
             })
         });
     } else {
         res.send({
             records: records.map(record => {
-                const { id, name, number, zOffset, useZOffset = {} } = { ...record };
-                return { id, name, number, zOffset, useZOffset };
+                const { id, name, number, zOffset, pickupX, pickupY, pickupZ = {} } = { ...record };
+                return { id, name, number, zOffset, pickupX, pickupY, pickupZ };
             })
         });
     }
 };
 
 export const create = (req, res) => {
-    const { name, number, zOffset, useZOffset = {} } = { ...req.body };
+    const { name, number, zOffset, pickupX, pickupY, pickupZ = {} } = { ...req.body };
 
     if (!name) {
         res.status(ERR_BAD_REQUEST).send({
@@ -97,7 +97,9 @@ export const create = (req, res) => {
             name: name,
             number: number,
             zOffset: zOffset,
-            useZOffset: useZOffset
+            pickupX: pickupX,
+            pickupY: pickupY,
+            pickupZ: pickupZ
         };
 
         records.push(record);
@@ -123,8 +125,8 @@ export const read = (req, res) => {
         return;
     }
 
-    const { name, number, zOffset, useZOffset = {} } = { ...record };
-    res.send({ id, name, number, zOffset, useZOffset });
+    const { name, number, zOffset, pickupX, pickupY, pickupZ = {} } = { ...record };
+    res.send({ id, name, number, zOffset, pickupX, pickupY, pickupZ });
 };
 
 export const update = (req, res) => {
@@ -143,7 +145,9 @@ export const update = (req, res) => {
         name = record.name,
         number = record.number,
         zOffset = record.zOffset,
-        useZOffset = record.useZOffset
+        pickupX = record.pickupX,
+        pickupY = record.pickupY,
+        pickupZ = record.pickupZ
     } = { ...req.body };
 
     /*
@@ -166,7 +170,9 @@ export const update = (req, res) => {
         record.name = String(name || '');
         record.number = number;
         record.zOffset = parseFloat(zOffset);
-        record.useZOffset = Boolean(useZOffset);
+        record.pickupX = parseFloat(pickupX);
+        record.pickupY = parseFloat(pickupY);
+        record.pickupZ = parseFloat(pickupZ);
 
         config.set(CONFIG_KEY, records);
 
@@ -193,7 +199,7 @@ export const bulkUpdate = (req, res) => {
 
     for (let i = 0; i < filteredRecords.length; ++i) {
         const record = filteredRecords[i];
-        const { id, name, number, zOffset, useZOffset = {} } = { ...record };
+        const { id, name, number, zOffset, pickupX, pickupY, pickupZ = {} } = { ...record };
 
         if (!id) {
             record.id = uuid.v4();
@@ -201,7 +207,9 @@ export const bulkUpdate = (req, res) => {
         record.name = String(name || '');
         record.number = number;
         record.zOffset = parseFloat(zOffset);
-        record.useZOffset = Boolean(useZOffset);
+        record.pickupX = parseFloat(pickupX);
+        record.pickupY = parseFloat(pickupY);
+        record.pickupZ = parseFloat(pickupZ);
     }
 
     try {

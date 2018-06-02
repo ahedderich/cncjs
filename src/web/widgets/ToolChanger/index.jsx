@@ -4,6 +4,9 @@ import _ from 'lodash';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import { parse } from 'esprima';
+import evaluate from 'static-eval';
+import findIndex from 'lodash/findIndex';
 import Space from '../../components/Space';
 import Widget from '../../components/Widget';
 import controller from '../../lib/controller';
@@ -17,6 +20,23 @@ import {
     MODAL_SETTINGS
 } from './constants';
 import styles from './index.styl';
+
+const re = new RegExp(/\[[^\]]+\]/g);
+
+const translateWithContext = (data, context = {}) => {
+    if (typeof data !== 'string') {
+        return '';
+    }
+
+    data = data.replace(re, (match) => {
+        const expr = match.slice(1, -1);
+        const ast = parse(expr).body[0].expression;
+        const value = evaluate(ast, context);
+        return value !== undefined ? value : match;
+    });
+    return data;
+};
+
 
 class ToolChangerWidget extends PureComponent {
     static propTypes = {
@@ -73,17 +93,57 @@ class ToolChangerWidget extends PureComponent {
                 const forceGet = true;
                 this.content.reload(forceGet);
             }
+        },
+        changeTool: (number, callback) => {
+            if (this.state.currentState === 0 && (this.state.workflow.state === 'idle' || this.state.workflow.state === 'paused')) {
+                if (number !== this.state.currentToolNumber) {
+                    let context = {};
+                    let gcode = this.config.get('headMacro');
+                    if (this.state.currentToolNumber >= 0) {
+                        gcode = gcode + '\n' + this.config.get('unloadToolMacro');
+                        let indexCurrentTool = findIndex(this.state.tools, { number: '' + this.state.currentToolNumber });
+                        if (indexCurrentTool < 0) {
+                            return;
+                        }
+                        let currentTool = this.state.tools[indexCurrentTool];
+                        context.current_tool_number = currentTool.number;
+                        context.current_tool_z_offset = currentTool.zOffset;
+                        context.current_tool_pickup_x = currentTool.pickupX;
+                        context.current_tool_pickup_y = currentTool.pickupY;
+                        context.current_tool_pickup_z = currentTool.pickupZ;
+                    }
+                    if (number >= 0) {
+                        gcode = gcode + '\n' + this.config.get('loadToolMacro');
+                        let indexNextTool = findIndex(this.state.tools, { number: '' + number });
+                        if (indexNextTool < 0) {
+                            return;
+                        }
+                        let nextTool = this.state.tools[indexNextTool];
+                        context.next_tool_number = nextTool.number;
+                        context.next_tool_z_offset = nextTool.zOffset;
+                        context.next_tool_pickup_x = nextTool.pickupX;
+                        context.next_tool_pickup_y = nextTool.pickupY;
+                        context.next_tool_pickup_z = nextTool.pickupZ;
+                    }
+                    gcode = gcode + '\n' + this.config.get('footMacro');
+                    gcode = translateWithContext(gcode, context);
+                    controller.command('gcode', gcode);
+                    this.setState({
+                        currentToolNumber: number
+                    });
+                    this.config.set('currentTool', number);
+                }
+                if (callback) {
+                    callback();
+                }
+            }
+        },
+        unloadTool: (callback) => {
+            this.action.changeTool(-1);
         }
+
     };
     controllerEvents = {
-        'serialport:open': (options) => {
-            const { port } = options;
-            this.setState({ port: port });
-        },
-        'serialport:close': (options) => {
-            const initialState = this.getInitialState();
-            this.setState({ ...initialState });
-        },
         'sender:status': (data) => {
             const { hold, holdReason } = data;
 
@@ -96,7 +156,9 @@ class ToolChangerWidget extends PureComponent {
                     const words = ensureArray(data.words);
                     const toolNumber = _.fromPairs(words).T;
                     if (toolNumber > 0) {
-                        this.setState({ changeToolNumber: toolNumber });
+                        this.action.changeTool(toolNumber, () => {
+                            controller.command('gcode:resume');
+                        });
                     }
                 }
             }
@@ -143,12 +205,17 @@ class ToolChangerWidget extends PureComponent {
         this.config.set('minimized', minimized);
     }
     getInitialState() {
+        let currentTool = this.config.get('currentTool');
+        if (currentTool === undefined) {
+            currentTool = -1;
+        }
         return {
             minimized: this.config.get('minimized', false),
             isFullscreen: false,
             disabled: this.config.get('disabled'),
-            changeToolNumber: 0,
-            currentToolNumber: 0,
+            nextToolNumber: -1,
+            currentToolNumber: currentTool,
+            currentState: 0,
             tools: [],
             controller: {
                 type: controller.type,
@@ -287,13 +354,8 @@ class ToolChangerWidget extends PureComponent {
                     <Settings
                         config={config}
                         onSave={() => {
-                            const title = config.get('title');
-                            const url = config.get('url');
-                            this.setState({
-                                title: title,
-                                url: url
-                            });
                             action.closeModal();
+                            this.fetchTools();
                         }}
                         onCancel={action.closeModal}
                     />
@@ -303,6 +365,7 @@ class ToolChangerWidget extends PureComponent {
                             this.content = node;
                         }}
                         state={state}
+                        actions={action}
                         config={config}
                         disabled={state.disabled}
                     />
