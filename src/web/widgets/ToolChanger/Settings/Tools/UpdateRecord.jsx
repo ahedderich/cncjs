@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import { Container, Row, Col } from 'react-grid-system';
 import Modal from '../../../../components/Modal';
 import Space from '../../../../components/Space';
 import { ToastNotification } from '../../../../components/Notifications';
@@ -15,20 +16,23 @@ class UpdateRecord extends PureComponent {
         action: PropTypes.object
     };
 
-    useZOffset: null;
-
     get value() {
         const {
             name,
             number,
-            zOffset
+            zOffset,
+            pickupX,
+            pickupY,
+            pickupZ
         } = this.form.getValues();
 
         return {
             name: name,
             number: number,
             zOffset: zOffset,
-            useZOffset: this.useZOffset.checked
+            pickupX: pickupX,
+            pickupY: pickupY,
+            pickupZ: pickupZ
         };
     }
     render() {
@@ -39,7 +43,9 @@ class UpdateRecord extends PureComponent {
             name,
             number,
             zOffset,
-            useZOffset
+            pickupX,
+            pickupY,
+            pickupZ
         } = modal.params;
 
         return (
@@ -107,19 +113,6 @@ class UpdateRecord extends PureComponent {
                                 />
                             </div>
                             <div className={styles.formGroup}>
-                                <label>
-                                    <input
-                                        ref={node => {
-                                            this.useZOffset = node;
-                                        }}
-                                        type="checkbox"
-                                        defaultChecked={useZOffset}
-                                    />
-                                    <Space width="8" />
-                                    {i18n._('Use Static Z Offset')}
-                                </label>
-                            </div>
-                            <div className={styles.formGroup}>
                                 <label>{i18n._('Static Z Offset')}</label>
                                 <Input
                                     type="number"
@@ -132,6 +125,51 @@ class UpdateRecord extends PureComponent {
                                     )}
                                 />
                             </div>
+
+                            <b>{i18n._('Pickup Location')}</b>
+                            <Container fluid>
+                                <Row>
+                                    <Col className="col-xs-3">
+                                        <label>{i18n._('X')}</label>
+                                        <Input
+                                            type="number"
+                                            name="pickupX"
+                                            value={pickupX}
+                                            className={cx(
+                                                'form-control',
+                                                styles.formControl,
+                                                styles.short
+                                            )}
+                                        />
+                                    </Col>
+                                    <Col className="col-xs-3">
+                                        <label>{i18n._('Y')}</label>
+                                        <Input
+                                            type="number"
+                                            name="pickupY"
+                                            value={pickupY}
+                                            className={cx(
+                                                'form-control',
+                                                styles.formControl,
+                                                styles.short
+                                            )}
+                                        />
+                                    </Col>
+                                    <Col className="col-xs-3">
+                                        <label>{i18n._('Z')}</label>
+                                        <Input
+                                            type="number"
+                                            name="pickupZ"
+                                            value={pickupZ}
+                                            className={cx(
+                                                'form-control',
+                                                styles.formControl,
+                                                styles.short
+                                            )}
+                                        />
+                                    </Col>
+                                </Row>
+                            </Container>
                         </div>
                     </Form>
                 </Modal.Body>
@@ -153,9 +191,9 @@ class UpdateRecord extends PureComponent {
                                 }
 
                                 const { id } = modal.params;
-                                const { name, number, zOffset, useZOffset } = this.value;
+                                const { name, number, zOffset, pickupX, pickupY, pickupZ } = this.value;
 
-                                action.updateRecord(id, { name, number, zOffset, useZOffset });
+                                action.updateRecord(id, { name, number, zOffset, pickupX, pickupY, pickupZ });
                             });
                         }}
                     >

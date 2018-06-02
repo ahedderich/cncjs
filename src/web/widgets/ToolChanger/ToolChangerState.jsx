@@ -41,7 +41,7 @@ class ToolPanel extends PureComponent {
                         </div>
                         <div className="col col-xs-8">
                             <div className={styles.well}>
-                                {state.currentToolNumber} -&gt; 2
+                                {state.currentToolNumber} <i className="fa fa-fw fa-arrow-right" /> 2
                             </div>
                         </div>
                     </div>
